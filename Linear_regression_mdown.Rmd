@@ -1,0 +1,57 @@
+---
+title: "Linear_regression"
+author: "Nicolas Ayala"
+date: "09-04-2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Linear Regression
+Example of a linear regression and multiple regression study of the "airquality" dataset from the MASS package.
+
+A. Linear Regression
+```{r Seccion 3: RLINEAR}
+library("MASS")
+#Simpler Linear Regression
+airq_data= na.exclude(airquality)
+plot(airq_data)
+cor(airq_data[,c("Ozone","Temp")], use="complete")
+
+#Multiple Linea regression for wind and Temp variables (pearson = -45798)
+plot(Ozone~ Temp, data= airq_data, main="Simpler Linear Regression for Ozone and Temperature", col=2)
+model = lm(Ozone~ Temp, data= airq_data)
+summary(model)
+abline(model)
+
+# In this model it is observed that there is a direct relationship of the variables with an R: 0.48. The p value is less than 0.05, the null hypothesis is rejected and the alternative hypothesis is accepted.  
+
+```
+
+
+B. Multiple Linear Regression.
+```{r Seccion 4: RMultiple}
+cor(x=airq_data,method="pearson")
+rmultiple_temp = lm (airq_data$Temp~airq_data$Ozone+airq_data$Month+airq_data$Day+ airq_data$Solar.R+airq_data$Wind)
+summary(rmultiple_temp)
+
+
+```
+
+
+```{r Seccion 4: RMultiple Step}
+#Use of step to chosee the best model. 
+step(object=rmultiple_temp,direction ="both", trace=1)
+
+# The best performing Step function model. 
+#Call:
+#lm(formula = airq_data$Temp ~ airq_data$Ozone + airq_data$Month + 
+#   airq_data$Solar.R)
+
+#Coefficients:
+#      (Intercept)    airq_data$Ozone    airq_data$Month  airq_data$Solar.R  
+#         53.26290            0.17650            2.09279            0.01081  
+
+```
